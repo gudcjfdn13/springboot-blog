@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion> <!-- maven의 pom.xml의 모델 버전 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.4.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.hci.blog</groupId> <!-- 프로젝트를 생성한 조직 또는 그룹명, 보통 URL의 역순 -->
+	<artifactId>spring-boot-blog</artifactId> <!-- 프로젝트에서 생성되는 기본 아티팩트의 고유 이름 -->
+	<version>0.0.1-SNAPSHOT</version> <!-- 애플리케이션 버전. 접미사로 SNAPSHOT이 붙으면 아직 개발단계라는 뜻 -->
+	<packaging>war</packaging> <!-- jar, war, ear, pom등 패키지 유형을 나타냄 -->
+	<name>spring-boot-blog</name> <!-- 프로젝트 명 -->
+	<description>spring-boot-blog</description> <!-- 프로젝트 설명 -->
+	<properties> <!-- pom.xml에서 중복해서 사용되는 설정(상수) 값들을 지정해놓은 부분. 다른 위치에서 ${...}로 표기해서 사용할 수 있다 -->
+		<java.version>1.8</java.version> <!-- java.version에 1.8을 적용하고 있으므로 다른 위치에서 ${java.version}이라고 쓰면 "1.8"이라고 쓴 것과 같다 -->
+	</properties>
+
+	<dependencies>
+        
+        <!-- 스트링부트 기본 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+		<!-- 웹 관련 컨트롤러 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+        <!-- 스트링부트 내장 톰켓 -->
+        <!-- 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        -->
+   
+        <!-- 스프링 JDBC DB에 연동하기 위한 API -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+   
+        <!-- MyBatis DB사용이 간편해짐 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        
+        <!-- JDBC에서 실제 MySQL과의 연결은 드라이버에게 위임합니다. 그 때 사용할 드라이버 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- JSTL, 스프링의 기본 내장 톰캣에는 이게 없다 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <!-- JSP 엔진, 스프링의 기본 내장 톰캣에는 이게 없다 -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+		<!-- 개발 중 코드 변경 시, 자동으로 리로드 되게 한다, 서버 재시작이 필요 없다. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- DTO getter/setter를 자동으로 만들어줌 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+        <!-- 실행되는 SQL로그를 정리해서 보여준다. -->
+        <dependency>
+            <groupId>org.bgee.log4jdbc-log4j2</groupId>
+            <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+            <version>1.16</version>
+        </dependency>
+ 
+        <!-- 메일 보내기 위한 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+	
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

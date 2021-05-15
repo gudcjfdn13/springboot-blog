@@ -1,0 +1,12 @@
+DROP DATABASE springbootblog;
+CREATE DATABASE springbootblog;
+USE springbootblog;
+
+CREATE TABLE `article` (
+id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+regDate DATETIME NOT NULL,
+updateDate DATETIME NOT NULL,
+`title` CHAR(30) NOT NULL,
+`body` VARCHAR(300) NOT NULL
+
+);

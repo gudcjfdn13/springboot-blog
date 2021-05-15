@@ -1,0 +1,28 @@
+server :
+  port: 8081
+  
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-message: always
+    include-binding-errors: always
+    
+spring:
+  profiles:
+    active: local
+    
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+           
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/springbootblog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
+    username: root
+    password: 
+    
+mybatis:
+  type-aliases-package: com.hci.blog.springboot.dto
+  
+ 

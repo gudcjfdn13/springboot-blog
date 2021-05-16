@@ -55,6 +55,11 @@ public class ArticleService {
 		
 		return new ResultData("S-1", "글 작성 성공");
 	}// confirm
+
+	
+	public void doDelete(int id) {
+		articleDao.doDelete(id);
+	}// doDelete
 	
 
 }

@@ -74,4 +74,12 @@ public class ArticleController {
 		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", Util.getAsInt(modifyParam.get("id"))));
 		return "common/redirect";
 	}// doModify
+	
+	@RequestMapping("article/doDelete")
+	public String doDelete(Model model, int id) {
+		articleService.doDelete(id);
+		
+		model.addAttribute("replaceUri", "/article/list");
+		return "common/redirect";
+	}// doDelete
 }

@@ -39,4 +39,10 @@
 	</set>
 	WHERE id = #{id}
 	</update>
+	
+	<!-- doDelete -->
+	<delete id="doDelete">
+	DELETE FROM `article`
+	WHERE id = #{id}
+	</delete>
 </mapper>

@@ -19,4 +19,6 @@ public interface ArticleDao {
 
 	void doModify(Map<String, Object> modifyParam);
 
+	void doDelete(@Param("id") int id);
+
 }

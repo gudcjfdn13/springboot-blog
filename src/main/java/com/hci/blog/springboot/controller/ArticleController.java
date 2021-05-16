@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hci.blog.springboot.Service.ArticleService;
+import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Article;
 import com.hci.blog.springboot.dto.ResultData;
 
@@ -70,7 +71,7 @@ public class ArticleController {
 			return "common/redirect";
 		}
 		
-		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", modifyParam.get("id")));
+		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", Util.getAsInt(modifyParam.get("id"))));
 		return "common/redirect";
 	}// doModify
 }

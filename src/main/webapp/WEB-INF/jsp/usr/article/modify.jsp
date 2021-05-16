@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Article Write</title>
+<title>Article Modify</title>
 
 <style>
 th, td {
@@ -21,20 +21,21 @@ textarea {
 </style>
 </head>
 <body>
-    <form action="/article/doWrite" method="POST">
+    <form action="/article/doModify" method="POST">
+    <input type="hidden" name="id" value="${article.id }"/>
         <table>
             <thead>
                 <tr>
                     <th>Title</th>
                     <td>
-                        <input name="title" type="text" placeholder="제목" autocomplete="off" />
+                        <input name="title" type="text" placeholder="제목" autocomplete="off" value="${article.title }" />
                     </td>
                 </tr>
             </thead>
             <tr>
                 <th>Body</th>
                 <td>
-                    <textarea name="body" cols="30" rows="10"></textarea>
+                    <textarea name="body" cols="30" rows="10">${article.body }</textarea>
                 </td>
             </tr>
         </table>

@@ -8,6 +8,7 @@
 	<select id="getArticles" resultType="Article">
 		SELECT *
 		FROM `article`
+		ORDER BY id DESC
 	</select>
 
 	<!-- getArticle -->
@@ -27,4 +28,15 @@
 	`body` = #{body},
 	</set>
 	</insert>
+	
+	<!-- doModify -->
+	<update id="doModify">
+	UPDATE `article`
+	<set>
+	updateDate = NOW(),
+	`title` = #{title},
+	`body` = #{body},
+	</set>
+	WHERE id = #{id}
+	</update>
 </mapper>

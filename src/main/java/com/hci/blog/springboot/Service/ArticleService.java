@@ -27,17 +27,34 @@ public class ArticleService {
 	}// getArticle
 
 	public ResultData write(Map<String, Object> writeParam) {
-		String title = Util.getAsString(writeParam.get("title"));
-		String body = Util.getAsString(writeParam.get("body"));
+		ResultData cf = confirm(writeParam);
+		if(cf.isFail())
+			return new ResultData(cf.getResultCode(), cf.getMsg());
+		
+		articleDao.doWrite(writeParam);
+		return new ResultData(cf.getResultCode(), cf.getMsg());
+	}// writeConfirm
+
+	public ResultData modify(Map<String, Object> modifyParam) {
+		ResultData cf = confirm(modifyParam);
+		if(cf.isFail())
+			return new ResultData(cf.getResultCode(), cf.getMsg());
+		
+		articleDao.doModify(modifyParam);
+		return new ResultData(cf.getResultCode(), cf.getMsg());
+	}// modifyConfirm
+	
+	private ResultData confirm(Map<String, Object> param) {
+		String title = Util.getAsString(param.get("title"));
+		String body = Util.getAsString(param.get("body"));
 
 		if (title.length() == 0)
 			return new ResultData("F-1", "제목을 입력해주세요.");
 		if (body.length() == 0)
 			return new ResultData("F-1", "내용을 입력해주세요.");
-
-		articleDao.doWrite(writeParam);
-
+		
 		return new ResultData("S-1", "글 작성 성공");
-	}// write
+	}// confirm
+	
 
 }

@@ -52,4 +52,25 @@ public class ArticleController {
 		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", writeParam.get("id")));
 		return "common/redirect";
 	}// doWrtie
+	
+	@RequestMapping("article/modify")
+	public String showModify(Model model, int id) {
+		Article article = articleService.getArticle(id);
+		
+		model.addAttribute("article", article);
+		return "usr/article/modify";
+	}// showModify
+	
+	@RequestMapping("article/doModify")
+	public String doModify(Model model, @RequestParam Map<String, Object> modifyParam) {
+		ResultData modifyRs = articleService.modify(modifyParam);
+		if(modifyRs.isFail()) {
+			model.addAttribute("msg", modifyRs.getMsg());
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
+		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", modifyParam.get("id")));
+		return "common/redirect";
+	}// doModify
 }

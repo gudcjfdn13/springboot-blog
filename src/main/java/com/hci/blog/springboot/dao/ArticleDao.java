@@ -17,4 +17,6 @@ public interface ArticleDao {
 
 	void doWrite(Map<String, Object> writeParam);
 
+	void doModify(Map<String, Object> modifyParam);
+
 }

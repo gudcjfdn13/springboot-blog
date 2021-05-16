@@ -33,6 +33,8 @@ table {
             <td>${article.body }</td>
         </tr>
     </table>
+    <a href="/article/doDelete">삭제</a>
+    <a href="/article/modify?id=${article.id }">수정</a>
 </body>
 <a href="/article/list">목록</a>
 </html>

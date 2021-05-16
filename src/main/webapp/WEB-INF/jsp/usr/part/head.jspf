@@ -17,6 +17,10 @@ table {
 textarea {
     resize: none;
 }
+input[type="text"], input[type="password"], textarea {
+    border: none;
+}
 </style>
 </head>
 <body>
+<a href="/member/login">로그인</a>

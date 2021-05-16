@@ -9,10 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.hci.blog.springboot.Service.ArticleService;
 import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Article;
 import com.hci.blog.springboot.dto.ResultData;
+import com.hci.blog.springboot.service.ArticleService;
 
 @Controller
 public class ArticleController {
@@ -22,7 +22,7 @@ public class ArticleController {
 	@RequestMapping("article/list")
 	public String showList(Model model) {
 		List<Article> articles = articleService.getArticles();
-		
+
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
 	}// showList

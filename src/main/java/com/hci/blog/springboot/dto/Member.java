@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article extends Dto{
-	private String title, body;
+public class Member extends Dto{
+	private String loginId, loginPw, name;
 }

@@ -1,4 +1,4 @@
-package com.hci.blog.springboot.Service;
+package com.hci.blog.springboot.service;
 
 import java.util.List;
 import java.util.Map;

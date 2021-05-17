@@ -109,7 +109,13 @@ public class ArticleController {
 	}// doModify
 
 	@RequestMapping("article/doDelete")
-	public String doDelete(Model model, int id) {
+	public String doDelete(Model model, HttpServletRequest request, int id) {
+		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+		if(loginedMemberId != id) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
 		articleService.doDelete(id);
 
 		model.addAttribute("replaceUri", "/article/list");

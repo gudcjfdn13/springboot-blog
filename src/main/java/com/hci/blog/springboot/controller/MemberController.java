@@ -63,7 +63,7 @@ public class MemberController {
 	@RequestMapping("member/doLogout")
 	public String doLogout(Model model, HttpSession session) {
 		session.removeAttribute("loginedMemberId");
-		
+
 		model.addAttribute("replaceUri", "/article/list");
 		return "common/redirect";
 	}// doLogout

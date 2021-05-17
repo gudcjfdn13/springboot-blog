@@ -18,67 +18,84 @@ import com.hci.blog.springboot.service.ArticleService;
 public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
-	
-	@RequestMapping("article/list")
-	public String showList(Model model) {
-		List<Article> articles = articleService.getArticles();
 
+	@RequestMapping("article/list")
+	public String showList(Model model, @RequestParam Map<String, Object> pageParam) {
+		int page = Util.getAsInt(pageParam.get("page"), 1); // 현 페이지
+		if (page < 1) page = 1;
+		int articlesInAPage = 10; // 페이지당 게시물
+		int articlesCnt = articleService.totalArticles(); // 총 게시물
+		int pageCnt = (int) Math.ceil((double) articlesCnt / articlesInAPage); // 총 페이지
+
+		int pageBlock = Math.abs((page - 1) / articlesInAPage) + 1; // 페이지 블럭
+		int startPage = ((pageBlock - 1) * articlesInAPage) + 1; // 시작 페이지
+		int lastPage = (startPage + articlesInAPage) - 1; // 끝 페이지
+		if(lastPage > pageCnt) lastPage = pageCnt;
+		pageParam.put("page", page);
+		pageParam.put("articlesInAPage", articlesInAPage);
+		List<Article> articles = articleService.getArticles(pageParam);
+
+		model.addAttribute("page", page);
+		model.addAttribute("articlesCnt", articlesCnt);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
 	}// showList
-	
+
 	@RequestMapping("article/detail")
 	public String showDetail(Model model, int id) {
 		Article article = articleService.getArticle(id);
-		
+
 		model.addAttribute("article", article);
 		return "usr/article/detail";
 	}// showDetail
-	
+
 	@RequestMapping("article/write")
 	public String showWrite() {
-		
+
 		return "usr/article/write";
 	}// showWrite
-	
+
 	@RequestMapping("article/doWrite")
 	public String doWrite(Model model, @RequestParam Map<String, Object> writeParam) {
 		ResultData writeRs = articleService.write(writeParam);
-		if(writeRs.isFail()) {
+		if (writeRs.isFail()) {
 			model.addAttribute("msg", writeRs.getMsg());
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", writeParam.get("id")));
 		return "common/redirect";
 	}// doWrtie
-	
+
 	@RequestMapping("article/modify")
 	public String showModify(Model model, int id) {
 		Article article = articleService.getArticle(id);
-		
+
 		model.addAttribute("article", article);
 		return "usr/article/modify";
 	}// showModify
-	
+
 	@RequestMapping("article/doModify")
 	public String doModify(Model model, @RequestParam Map<String, Object> modifyParam) {
 		ResultData modifyRs = articleService.modify(modifyParam);
-		if(modifyRs.isFail()) {
+		if (modifyRs.isFail()) {
 			model.addAttribute("msg", modifyRs.getMsg());
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", Util.getAsInt(modifyParam.get("id"))));
 		return "common/redirect";
 	}// doModify
-	
+
 	@RequestMapping("article/doDelete")
 	public String doDelete(Model model, int id) {
 		articleService.doDelete(id);
-		
+
 		model.addAttribute("replaceUri", "/article/list");
 		return "common/redirect";
 	}// doDelete

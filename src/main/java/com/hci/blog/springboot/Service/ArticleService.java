@@ -16,8 +16,17 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-	public List<Article> getArticles() {
-		List<Article> articles = articleDao.getArticles();
+	public int totalArticles() {
+		return articleDao.totalArticles();
+	}// totalArticles
+	
+	public List<Article> getArticles(Map<String, Object> pageParam) {
+		int articlesInAPage = Util.getAsInt(pageParam.get("articlesInAPage"));
+		int page = Util.getAsInt(pageParam.get("page"), 1);
+		int from = (page-1) * articlesInAPage;
+		int until = articlesInAPage;
+		
+		List<Article> articles = articleDao.getArticles(from, until);
 		return articles;
 	}// getArticles
 

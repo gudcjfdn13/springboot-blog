@@ -14,19 +14,20 @@ import com.hci.blog.springboot.dto.ResultData;
 public class MemberService {
 	@Autowired
 	MemberDao memberDao;
-	
+
 	public ResultData login(Map<String, Object> loginParam) {
 		String loginId = Util.getAsString(loginParam.get("loginId"));
 		String loginPw = Util.getAsString(loginParam.get("loginPw"));
-		
+
 		if (loginId.length() == 0)
 			return new ResultData("F-1", "아이디를 입력해주세요.");
 		if (loginPw.length() == 0)
 			return new ResultData("F-1", "비밀번호를 입력해주세요.");
-		
-		Member member = memberDao.getMember(loginParam); 
-		if(member == null) return new ResultData("F-1", "존재하지 않는 회원입니다.");
-		
+
+		Member member = memberDao.getMember(loginParam);
+		if (member == null)
+			return new ResultData("F-1", "존재하지 않는 회원입니다.");
+
 		return new ResultData("S-1", "로그인 성공", member.getId());
 	}// login
 
@@ -35,7 +36,7 @@ public class MemberService {
 		String loginPw = Util.getAsString(joinParam.get("loginPw"));
 		String loginPwCf = Util.getAsString(joinParam.get("loginPwCf"));
 		String name = Util.getAsString(joinParam.get("name"));
-		
+
 		if (loginId.length() == 0)
 			return new ResultData("F-1", "아이디를 입력해주세요.");
 		if (loginPw.length() == 0)
@@ -44,17 +45,17 @@ public class MemberService {
 			return new ResultData("F-1", "비밀번호가 일치하지 않습니다.");
 		if (name.length() == 0)
 			return new ResultData("F-1", "이름을 입력해주세요.");
-		if(memberDao.getMemberByLoginId(loginId) != null) {
+		if (memberDao.getMemberByLoginId(loginId) != null) {
 			return new ResultData("F-1", "이미 존재하는 아이디 입니다.");
 		}
 		memberDao.joinMember(joinParam);
-		
+
 		return new ResultData("S-1", "로그인 성공");
 	}// join
 
 	public Member getMemberById(int loginedMemberId) {
-		
+
 		return memberDao.getMemberById(loginedMemberId);
-	}
+	}// getMemberById
 
 }

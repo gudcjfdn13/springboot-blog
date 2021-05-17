@@ -17,6 +17,4 @@ public interface MemberDao {
 
 	void joinMember(Map<String, Object> joinParam);
 
-
-
 }

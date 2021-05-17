@@ -25,7 +25,12 @@ public class MemberController {
 	@RequestMapping("member/doJoin")
 	public String doJoin(Model model, @RequestParam Map<String, Object> joinParam) {
 		
-		memberService.join(joinParam);
+		ResultData joinRs = memberService.join(joinParam);
+		if(joinRs.isFail()) {
+			model.addAttribute("msg", joinRs.getMsg());
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
 		
 		model.addAttribute("replaceUri", "/member/login");
 		return "common/redirect";
@@ -39,14 +44,14 @@ public class MemberController {
 	
 	@RequestMapping("member/doLogin")
 	public String doLogin(Model model, @RequestParam Map<String, Object> loginParam) {
-		ResultData memberRs = memberService.login(loginParam);
-		if(memberRs.isFail()) {
-			model.addAttribute("msg", memberRs.getMsg());
+		ResultData loginRs = memberService.login(loginParam);
+		if(loginRs.isFail()) {
+			model.addAttribute("msg", loginRs.getMsg());
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
 		
-		int loginedMemberId = (int) memberRs.getBody();
+		int loginedMemberId = (int) loginRs.getBody();
 		
 		model.addAttribute("replaceUri", "/article/list");
 		return "common/redirect";

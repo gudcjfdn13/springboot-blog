@@ -3,7 +3,33 @@
 
 <c:set var="pageName" value="Login" />
 <%@ include file="../part/head.jspf"%>
-<form action="/member/doLogin">
+<script>
+    function doLoginConfirm(form) {
+        var isDone = false;
+        if (isDone) {
+            alert('처리중 입니다.');
+            return;
+        }
+
+        form.loginId.value = form.loginId.value.trim();
+        if (form.loginId.value.length == 0) {
+            alert('아이디를 입력하세요.');
+            form.loginId.focus();
+            return;
+        }
+
+        form.loginPw.value = form.loginPw.value.trim();
+        if (form.loginPw.value.length == 0) {
+            alert('비밀번호를 입력하세요.');
+            form.loginPw.focus();
+            return;
+        }
+
+        form.submit();
+        isDone = true;
+    }
+</script>
+<form action="/member/doLogin" onsubmit="doLoginConfirm(this); return false;">
     <table>
         <tr>
             <th>ID</th>

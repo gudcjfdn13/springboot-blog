@@ -3,7 +3,45 @@
 
 <c:set var="pageName" value="Sign Up" />
 <%@ include file="../part/head.jspf"%>
-<form action="/member/doJoin" method="POST">
+<script>
+    function doJoinConfirm(form) {
+        var isDone = false;
+        if (isDone) {
+            alert('처리중 입니다.');
+            return;
+        }
+
+        form.loginId.value = form.loginId.value.trim();
+        if (form.loginId.value.length == 0) {
+            alert('아이디를 입력하세요.');
+            form.loginId.focus();
+            return;
+        }
+
+        form.loginPw.value = form.loginPw.value.trim();
+        if (form.loginPw.value.length == 0) {
+            alert('비밀번호를 입력하세요.');
+            form.loginPw.focus();
+            return;
+        }
+        form.loginPwCf.value = form.loginPwCf.value.trim();
+        if (form.loginPw.value != form.loginPwCf.value) {
+            alert('비밀번호가 일치하지 않습니다.');
+            form.loginPwCf.focus();
+            return;
+        }
+        form.name.value = form.name.value.trim();
+        if (form.name.value.length == 0) {
+            alert('이름을 입력하세요.');
+            form.name.focus();
+            return;
+        }
+
+        form.submit();
+        isDone = true;
+    }
+</script>
+<form action="/member/doJoin" method="POST" onsubmit="doJoinConfirm(this); return false;">
     <table>
         <tr>
             <th>ID</th>
@@ -26,7 +64,7 @@
         <tr>
             <th>NAME</th>
             <td>
-                <input name="name" type="password" placeholder="Name" autocomplete="off" />
+                <input name="name" type="text" placeholder="Name" autocomplete="off" />
             </td>
         </tr>
     </table>

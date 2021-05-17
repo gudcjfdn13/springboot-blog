@@ -3,6 +3,8 @@ package com.hci.blog.springboot.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,7 +56,7 @@ public class ArticleController {
 
 	@RequestMapping("article/write")
 	public String showWrite() {
-
+		
 		return "usr/article/write";
 	}// showWrite
 
@@ -72,15 +74,29 @@ public class ArticleController {
 	}// doWrtie
 
 	@RequestMapping("article/modify")
-	public String showModify(Model model, int id) {
+	public String showModify(Model model, HttpServletRequest request, int id) {
+		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+		if(loginedMemberId != id) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
 		Article article = articleService.getArticle(id);
-
 		model.addAttribute("article", article);
 		return "usr/article/modify";
 	}// showModify
 
 	@RequestMapping("article/doModify")
-	public String doModify(Model model, @RequestParam Map<String, Object> modifyParam) {
+	public String doModify(Model model, HttpServletRequest request, @RequestParam Map<String, Object> modifyParam) {
+		int id = Util.getAsInt(modifyParam.get("id"));
+		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+		if(loginedMemberId != id) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
 		ResultData modifyRs = articleService.modify(modifyParam);
 		if (modifyRs.isFail()) {
 			model.addAttribute("msg", modifyRs.getMsg());

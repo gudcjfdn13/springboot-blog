@@ -10,4 +10,6 @@ import com.hci.blog.springboot.dto.Member;
 public interface MemberDao {
 	Member getMember(Map<String, Object> loginParam);
 
+	void joinMember(Map<String, Object> joinParam);
+
 }

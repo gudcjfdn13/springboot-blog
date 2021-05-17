@@ -15,6 +15,21 @@ import com.hci.blog.springboot.service.MemberService;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
+	
+	@RequestMapping("member/join")
+	public String showJoin() {
+		
+		return "usr/member/join";
+	}
+	
+	@RequestMapping("member/doJoin")
+	public String doJoin(Model model, @RequestParam Map<String, Object> joinParam) {
+		
+		memberService.join(joinParam);
+		
+		model.addAttribute("replaceUri", "/member/login");
+		return "common/redirect";
+	}
 
 	@RequestMapping("member/login")
 	public String showLogin() {

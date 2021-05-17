@@ -29,5 +29,12 @@ public class MemberService {
 		return new ResultData("S-1", "로그인 성공", member.getId());
 	}// login
 
+	public void join(Map<String, Object> joinParam) {
+
+
+		memberDao.joinMember(joinParam);
+		
+	}
+
 
 }

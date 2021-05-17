@@ -13,4 +13,16 @@
 	loginPw = #{loginPw}
 	</select>
 	
+	<!-- joinMember -->
+	<insert id="joinMember">
+	INSERT INTO `member`
+	<set>
+	regDate = NOW(),
+	updateDate = NOW(),
+	loginId = #{loginId},
+	loginPw = #{loginPw},
+	`name` = #{name},
+	</set>
+	</insert>
+	
 </mapper>

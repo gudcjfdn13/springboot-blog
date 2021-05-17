@@ -19,6 +19,13 @@
     FROM `member`
     WHERE loginId = #{loginId}
     </select>
+        
+    <!-- getMemberById -->
+    <select id="getMemberById" resultType="Member">
+    SELECT *
+    FROM `member`
+    WHERE id = #{id}
+    </select>
 	
 	<!-- joinMember -->
 	<insert id="joinMember">

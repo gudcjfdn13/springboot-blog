@@ -52,4 +52,9 @@ public class MemberService {
 		return new ResultData("S-1", "로그인 성공");
 	}// join
 
+	public Member getMemberById(int loginedMemberId) {
+		
+		return memberDao.getMemberById(loginedMemberId);
+	}
+
 }

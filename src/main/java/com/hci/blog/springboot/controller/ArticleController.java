@@ -22,7 +22,8 @@ public class ArticleController {
 	private ArticleService articleService;
 
 	@RequestMapping("article/list")
-	public String showList(Model model, @RequestParam Map<String, Object> pageParam) {
+	public String showList(Model model, HttpServletRequest request, @RequestParam Map<String, Object> pageParam) {
+		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
 		int page = Util.getAsInt(pageParam.get("page"), 1); // 현 페이지
 		if (page < 1) page = 1;
 		int articlesInAPage = 10; // 페이지당 게시물
@@ -33,10 +34,13 @@ public class ArticleController {
 		int startPage = ((pageBlock - 1) * articlesInAPage) + 1; // 시작 페이지
 		int lastPage = (startPage + articlesInAPage) - 1; // 끝 페이지
 		if(lastPage > pageCnt) lastPage = pageCnt;
+		
 		pageParam.put("page", page);
 		pageParam.put("articlesInAPage", articlesInAPage);
-		List<Article> articles = articleService.getArticles(pageParam);
+		List<Article> articles = articleService.getArticles(pageParam, loginedMemberId);
 
+		System.out.println("articles : " + articles.toString());
+		
 		model.addAttribute("page", page);
 		model.addAttribute("articlesCnt", articlesCnt);
 		model.addAttribute("startPage", startPage);
@@ -47,8 +51,9 @@ public class ArticleController {
 	}// showList
 
 	@RequestMapping("article/detail")
-	public String showDetail(Model model, int id) {
-		Article article = articleService.getArticle(id);
+	public String showDetail(Model model, HttpServletRequest request, int id) {
+		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+		Article article = articleService.getArticle(id, loginedMemberId);
 
 		model.addAttribute("article", article);
 		return "usr/article/detail";

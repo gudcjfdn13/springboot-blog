@@ -1,5 +1,6 @@
 package com.hci.blog.springboot.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,18 +21,29 @@ public class ArticleService {
 		return articleDao.totalArticles();
 	}// totalArticles
 	
-	public List<Article> getArticles(Map<String, Object> pageParam) {
+	public List<Article> getArticles(Map<String, Object> pageParam, int loginedMemberId) {
 		int articlesInAPage = Util.getAsInt(pageParam.get("articlesInAPage"));
 		int page = Util.getAsInt(pageParam.get("page"), 1);
 		int from = (page-1) * articlesInAPage;
 		int until = articlesInAPage;
 		
 		List<Article> articles = articleDao.getArticles(from, until);
+		
+		for(Article article : articles) {
+			authCheck(article, loginedMemberId);
+		}
+		
 		return articles;
 	}// getArticles
 
 	public Article getArticle(int id) {
 		Article article = articleDao.getArticle(id);
+		return article;
+	}// getArticle
+
+	public Article getArticle(int id, int loginedMemberId) {
+		Article article = articleDao.getArticle(id);
+		authCheck(article, loginedMemberId);
 		return article;
 	}// getArticle
 
@@ -65,6 +77,17 @@ public class ArticleService {
 		return new ResultData("S-1", "글 작성 성공");
 	}// confirm
 
+	private void authCheck(Article article, int loginedMemberId) {
+		if(article.getExtra()==null) {
+			article.setExtra(new HashMap<String, Object>());
+		}
+		boolean canModify = article.getId() == loginedMemberId;
+		boolean canDelete = canModify;
+		
+		article.getExtra().put("canModify", canModify);
+		article.getExtra().put("canDelete", canDelete);
+		
+	}// authCheck
 	
 	public void doDelete(int id) {
 		articleDao.doDelete(id);

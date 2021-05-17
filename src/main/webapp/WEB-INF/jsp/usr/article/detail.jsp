@@ -20,7 +20,11 @@
         <td>${article.body }</td>
     </tr>
 </table>
-<a href="/article/doDelete?id=${article.id }">삭제</a>
-<a href="/article/modify?id=${article.id }">수정</a>
+<c:if test="${article.extra.canDelete }">
+    <a href="/article/doDelete?id=${article.id }">삭제</a>
+</c:if>
+<c:if test="${article.extra.canDelete }">
+    <a href="/article/modify?id=${article.id }">수정</a>
+</c:if>
 <a href="/article/list">목록</a>
 <%@ include file="../part/foot.jspf"%>

@@ -21,6 +21,6 @@
         </tr>
     </table>
     <input type="submit" value="작성" />
-    <a href="/article/list">목록</a>
+    <a href="${listUri }">목록</a>
 </form>
 <%@ include file="../part/foot.jspf"%>

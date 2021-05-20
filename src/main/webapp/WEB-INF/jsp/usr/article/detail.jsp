@@ -26,5 +26,5 @@
 <c:if test="${article.extra.canDelete }">
     <a href="/article/modify?id=${article.id }">수정</a>
 </c:if>
-<a href="/article/list">목록</a>
+<a href="${listUri }">목록</a>
 <%@ include file="../part/foot.jspf"%>

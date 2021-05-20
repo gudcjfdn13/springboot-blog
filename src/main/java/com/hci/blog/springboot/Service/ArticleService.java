@@ -17,17 +17,17 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-	public int totalArticles() {
-		return articleDao.totalArticles();
+	public int totalArticles(String searchKeyword) {
+		return articleDao.totalArticles(searchKeyword);
 	}// totalArticles
 	
-	public List<Article> getArticles(Map<String, Object> pageParam, int loginedMemberId) {
+	public List<Article> getArticles(Map<String, Object> pageParam, int loginedMemberId, String searchKeyword) {
 		int articlesInAPage = Util.getAsInt(pageParam.get("articlesInAPage"));
 		int page = Util.getAsInt(pageParam.get("page"), 1);
 		int from = (page-1) * articlesInAPage;
 		int until = articlesInAPage;
 		
-		List<Article> articles = articleDao.getArticles(from, until);
+		List<Article> articles = articleDao.getArticles(from, until, searchKeyword);
 		
 		for(Article article : articles) {
 			authCheck(article, loginedMemberId);

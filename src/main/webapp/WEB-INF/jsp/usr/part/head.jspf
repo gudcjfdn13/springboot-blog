@@ -18,9 +18,7 @@ table {
 textarea {
     resize: none;
 }
-input[type="text"], input[type="password"], textarea {
-    border: none;
-}
+
 </style>
 </head>
 <body>

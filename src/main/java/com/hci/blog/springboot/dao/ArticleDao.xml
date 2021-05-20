@@ -8,6 +8,7 @@
 	<select id="totalArticles" resultType="int">
 		SELECT COUNT(*)
 		FROM article
+		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
 	</select>
 
 	<!-- getArticles -->
@@ -17,6 +18,7 @@
 		FROM `article` AS a
 		INNER JOIN `member` AS m
 		ON a.memberId = m.id
+		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
 		ORDER BY id DESC
 		LIMIT #{from}, #{until}
 	</select>

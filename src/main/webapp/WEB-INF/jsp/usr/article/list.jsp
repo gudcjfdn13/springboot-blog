@@ -3,11 +3,12 @@
 
 <c:set var="pageName" value="Article List" />
 <%@ include file="../part/head.jspf"%>
-
+<!-- 게시물 없을때 -->
 <c:if test="${articles.size() == 0 }">
     <h1>게시물이 없습니다.</h1>
 </c:if>
-
+<!-- 게시물 리스팅 -->
+<div>총 게시물 : ${articlesCnt }</div>
 <c:if test="${articles.size() > 0 }">
     <table>
         <thead>
@@ -30,7 +31,12 @@
         </c:forEach>
     </table>
 </c:if>
-
+<!-- 게시물 서칭 -->
+<form action="/article/list">
+    <input type="text" name="searchKeyword" placeholder="Search" value="${searchKeyword }" />
+    <input type="submit" value="검색" />
+</form>
+<!-- 게시물 페이징 -->
 <a href="/article/list">처음으로</a>
 <a href="/article/list?page=${page-1 }">◀</a>
 <c:forEach var="num" begin="${startPage }" end="${lastPage }">

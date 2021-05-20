@@ -11,9 +11,9 @@ import com.hci.blog.springboot.dto.Article;
 @Mapper
 public interface ArticleDao {
 
-	int totalArticles();
+	int totalArticles(@Param("searchKeyword") String searchKeyword);
 
-	List<Article> getArticles(@Param("from") int from, @Param("until")  int until);
+	List<Article> getArticles(@Param("from") int from, @Param("until")  int until, @Param("searchKeyword") String searchKeyword);
 
 	Article getArticle(@Param("id") int id);
 

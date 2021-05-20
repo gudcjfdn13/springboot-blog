@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Article;
+import com.hci.blog.springboot.dto.Reply;
 import com.hci.blog.springboot.dto.ResultData;
 import com.hci.blog.springboot.service.ArticleService;
+import com.hci.blog.springboot.service.ReplyService;
 
 @Controller
 public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private ReplyService replyService;
 
 	@RequestMapping("article/list")
 	public String showList(Model model, HttpServletRequest request, @RequestParam Map<String, Object> pageParam) {
@@ -57,7 +61,10 @@ public class ArticleController {
 		Article article = articleService.getArticleForPrint(id, loginedMemberId);
 		if(listUri == null) listUri = "/article/list";
 		
+		List<Reply> replies = replyService.getReplies(id);
+		
 		model.addAttribute("listUri", listUri);
+		model.addAttribute("replies", replies);
 		model.addAttribute("article", article);
 		return "usr/article/detail";
 	}// showDetail

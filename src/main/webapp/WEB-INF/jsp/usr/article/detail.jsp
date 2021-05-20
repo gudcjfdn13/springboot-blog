@@ -30,4 +30,17 @@
     <a href="/article/modify?id=${article.id }">수정</a>
 </c:if>
 <a href="${listUri }">목록</a>
+<!-- 댓글 작성 -->
+<form action="/reply/doWrite" method="POST">
+    <input type="hidden" name="articleId" value="${article.id }" />
+    <input type="hidden" name="memberId" value="${requestScope.loginedMemberId}" />
+    <textarea name="body" cols="30" rows="5" placeholder="댓글"></textarea>
+    <input type="submit" value="작성" />
+</form>
+<!-- 댓글 리스팅 -->
+<c:forEach var="reply" items="${replies }">
+    <div>작성자 : ${reply.extra.writer } <br /> 
+    내용 : ${reply.body }</div>
+    <br />
+</c:forEach>
 <%@ include file="../part/foot.jspf"%>

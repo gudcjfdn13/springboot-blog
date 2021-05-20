@@ -38,5 +38,15 @@
 			`name` = #{name},
 		</set>
 	</insert>
+	
+	<!-- modifyUserInfo -->
+	<update id="modifyUserInfo">
+	UPDATE `member`
+	<set>
+	updateDate = NOW(),
+	loginPw = #{loginPw},
+	</set>
+	WHERE id = #{id}
+	</update>
 
 </mapper>

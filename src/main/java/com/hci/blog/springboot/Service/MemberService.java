@@ -58,4 +58,18 @@ public class MemberService {
 		return memberDao.getMemberById(loginedMemberId);
 	}// getMemberById
 
+	public ResultData modify(Map<String, Object> modifyParam) {
+		String loginPw = Util.getAsString(modifyParam.get("loginPw"));
+		String loginPwCf = Util.getAsString(modifyParam.get("loginPwCf"));
+		
+		if (loginPw.length() == 0)
+			return new ResultData("F-1", "비밀번호를 입력해주세요.");
+		if (loginPw.equals(loginPwCf) == false)
+			return new ResultData("F-1", "비밀번호가 일치하지 않습니다.");
+		
+		memberDao.modifyUserInfo(modifyParam);
+		
+		return new ResultData("S-1", "정보수정 성공");
+	}
+
 }

@@ -28,11 +28,7 @@ public class ArticleService {
 		int until = articlesInAPage;
 		
 		List<Article> articles = articleDao.getArticles(from, until, searchKeyword);
-		
-		for(Article article : articles) {
-			authCheck(article, loginedMemberId);
-		}
-		
+
 		return articles;
 	}// getArticles
 
@@ -41,9 +37,18 @@ public class ArticleService {
 		return article;
 	}// getArticle
 
-	public Article getArticle(int id, int loginedMemberId) {
-		Article article = articleDao.getArticle(id);
-		authCheck(article, loginedMemberId);
+	public Article getArticleForPrint(int id, int loginedMemberId) {
+		Article article = articleDao.getArticleForPrint(id);
+		
+		if(article.getExtra()==null) {
+			article.setExtra(new HashMap<String, Object>());
+		}
+		boolean canModify = article.getMemberId() == loginedMemberId;
+		boolean canDelete = canModify;
+		
+		article.getExtra().put("canModify", canModify);
+		article.getExtra().put("canDelete", canDelete);
+		
 		return article;
 	}// getArticle
 
@@ -77,18 +82,6 @@ public class ArticleService {
 		return new ResultData("S-1", "글 작성 성공");
 	}// confirm
 
-	private void authCheck(Article article, int loginedMemberId) {
-		if(article.getExtra()==null) {
-			article.setExtra(new HashMap<String, Object>());
-		}
-		boolean canModify = article.getId() == loginedMemberId;
-		boolean canDelete = canModify;
-		
-		article.getExtra().put("canModify", canModify);
-		article.getExtra().put("canDelete", canDelete);
-		
-	}// authCheck
-	
 	public void doDelete(int id) {
 		articleDao.doDelete(id);
 	}// doDelete

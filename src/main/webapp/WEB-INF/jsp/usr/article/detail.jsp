@@ -3,11 +3,14 @@
 
 <c:set var="pageName" value="Article Detail" />
 <%@ include file="../part/head.jspf"%>
+<!-- 게시물 상세 -->
 <table>
     <thead>
         <tr>
             <th>No</th>
             <td>${article.id }</td>
+            <th>Writer</th>
+            <td>${article.extra.writer }</td>
             <th>Title</th>
             <td>${article.title }</td>
 
@@ -23,7 +26,7 @@
 <c:if test="${article.extra.canDelete }">
     <a href="/article/doDelete?id=${article.id }">삭제</a>
 </c:if>
-<c:if test="${article.extra.canDelete }">
+<c:if test="${article.extra.canModify }">
     <a href="/article/modify?id=${article.id }">수정</a>
 </c:if>
 <a href="${listUri }">목록</a>

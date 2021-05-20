@@ -54,7 +54,7 @@ public class ArticleController {
 	@RequestMapping("article/detail")
 	public String showDetail(Model model, HttpServletRequest request, int id, String listUri) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
-		Article article = articleService.getArticle(id, loginedMemberId);
+		Article article = articleService.getArticleForPrint(id, loginedMemberId);
 		if(listUri == null) listUri = "/article/list";
 		
 		model.addAttribute("listUri", listUri);

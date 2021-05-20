@@ -7,19 +7,23 @@
 	<!-- totalArticles -->
 	<select id="totalArticles" resultType="int">
 		SELECT COUNT(*)
-		FROM article
+		FROM
+		article
 		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
 	</select>
 
 	<!-- getArticles -->
 	<select id="getArticles" resultMap="article">
 		SELECT a.*,
-		m.name AS extra__writer
+		m.name AS
+		extra__writer
 		FROM `article` AS a
 		INNER JOIN `member` AS m
-		ON a.memberId = m.id
+		ON a.memberId
+		= m.id
 		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
-		ORDER BY id DESC
+		ORDER BY id
+		DESC
 		LIMIT #{from}, #{until}
 	</select>
 
@@ -28,7 +32,18 @@
 		SELECT *
 		FROM `article`
 		WHERE
-		id = #{id}
+		id
+		= #{id}
+	</select>
+
+	<!-- getArticleForPrint -->
+	<select id="getArticleForPrint" resultMap="article">
+		SELECT a.*,
+		m.name AS extra__writer
+		FROM `article` AS a
+		INNER JOIN `member` AS m
+		ON a.memberId = m.id
+		WHERE a.id = #{id}
 	</select>
 
 	<!-- doWrite -->

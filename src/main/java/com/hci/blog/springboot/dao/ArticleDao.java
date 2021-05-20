@@ -17,10 +17,13 @@ public interface ArticleDao {
 
 	Article getArticle(@Param("id") int id);
 
+	Article getArticleForPrint(@Param("id") int id);
+
 	void doWrite(Map<String, Object> writeParam);
 
 	void doModify(Map<String, Object> modifyParam);
 
 	void doDelete(@Param("id") int id);
+
 
 }

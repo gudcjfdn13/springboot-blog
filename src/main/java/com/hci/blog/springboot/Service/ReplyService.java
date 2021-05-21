@@ -16,9 +16,18 @@ public class ReplyService {
 
 	public void write(Map<String, Object> writeParam) {
 		replyDao.doWrite(writeParam);
-	}
+	}// write
 
 	public List<Reply> getReplies(int articleId) {
 		return replyDao.getReplies(articleId);
-	}
+	}// getReplies
+
+	public Reply getReply(int id) {
+		return replyDao.getReply(id);
+	}// getReply
+
+	public void doDelete(int id) {
+		replyDao.doDelete(id);
+		
+	}// doDelete
 }

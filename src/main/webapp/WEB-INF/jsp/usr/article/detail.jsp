@@ -41,6 +41,7 @@
 <c:forEach var="reply" items="${replies }">
     <div>작성자 : ${reply.extra.writer } <br /> 
     내용 : ${reply.body }</div>
+    <div><a href="/reply/doDelete?id=${reply.id }">삭제</a></div>
     <br />
 </c:forEach>
 <%@ include file="../part/foot.jspf"%>

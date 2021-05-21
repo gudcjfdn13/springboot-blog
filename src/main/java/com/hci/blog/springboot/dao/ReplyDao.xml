@@ -14,6 +14,13 @@
 		WHERE r.articleId = #{articleId}
 		ORDER BY id DESC
 	</select>
+	
+	<!-- getReply -->
+	<select id="getReply" resultMap="reply">
+	SELECT *
+	FROM `reply`
+	WHERE id = #{id}
+	</select>
 
 	<!-- doWrite -->
 	<insert id="doWrite">
@@ -26,6 +33,12 @@
 			memberId = #{memberId},
 		</set>
 	</insert>
+	
+	<!-- doDelete -->
+	<delete id="doDelete">
+	DELETE FROM `reply`
+	WHERE id = #{id}
+	</delete>
 
 	<resultMap type="Reply" id="reply">
 		<id property="id" column="id" />

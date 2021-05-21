@@ -45,6 +45,6 @@
         </tr>
     </table>
     <input type="submit" value="로그인" />
-    <a href="/article/list">목록</a>
+    <a href="/main/home">목록</a>
 </form>
 <%@ include file="../part/foot.jspf"%>

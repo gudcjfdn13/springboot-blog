@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Reply;
+import com.hci.blog.springboot.dto.ResultData;
 import com.hci.blog.springboot.service.ReplyService;
 
 @Controller
@@ -22,8 +23,12 @@ public class ReplyController {
 	@RequestMapping("reply/doWrite")
 	public String doWrite(Model model, @RequestParam Map<String, Object> writeParam) {
 		int articleId = Util.getAsInt(writeParam.get("articleId"));
-		replyService.write(writeParam);
-		
+		ResultData writeRs = replyService.write(writeParam);
+		if (writeRs.isFail()) {
+			model.addAttribute("msg", writeRs.getMsg());
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
 		String listUri = Util.getAsString(writeParam.get("listUri"), "");
 		
 		model.addAttribute("listUri", listUri);

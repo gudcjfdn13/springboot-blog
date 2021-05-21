@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import com.hci.blog.springboot.service.MemberService;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
+	@Value("${custom.mainUri}")
+	private String mainUri;
 
 	@RequestMapping("member/join")
 	public String showJoin() {
@@ -35,13 +38,18 @@ public class MemberController {
 			return "common/redirect";
 		}
 
-		model.addAttribute("replaceUri", "/member/login");
+		model.addAttribute("replaceUri", mainUri);
 		return "common/redirect";
 	}// doJoin
 
 	@RequestMapping("member/login")
-	public String showLogin() {
-
+	public String showLogin(Model model, HttpServletRequest request) {
+		boolean isLogined = (boolean) request.getAttribute("isLogined");
+		if(isLogined) {
+			model.addAttribute("msg", "이미 로그인중 입니다.");
+			model.addAttribute("replaceUri", mainUri);
+		}
+		
 		return "usr/member/login";
 	}// showLogin
 
@@ -58,15 +66,20 @@ public class MemberController {
 
 		session.setAttribute("loginedMemberId", loginedMemberId);
 
-		model.addAttribute("replaceUri", "/article/list");
+		model.addAttribute("replaceUri", mainUri);
 		return "common/redirect";
 	}// doLogin
 
 	@RequestMapping("member/doLogout")
-	public String doLogout(Model model, HttpSession session) {
+	public String doLogout(Model model, HttpSession session, HttpServletRequest request) {
+		boolean isLogined = (boolean) request.getAttribute("isLogined");
+		if(!isLogined) {
+			model.addAttribute("msg", "로그인 상태가 아닙니다.");
+			model.addAttribute("replaceUri", mainUri);
+		}
 		session.removeAttribute("loginedMemberId");
 
-		model.addAttribute("replaceUri", "/article/list");
+		model.addAttribute("replaceUri", mainUri);
 		return "common/redirect";
 	}// doLogout
 	

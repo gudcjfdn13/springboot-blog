@@ -25,4 +25,5 @@ spring:
 mybatis:
   type-aliases-package: com.hci.blog.springboot.dto
   
- 
+custom :
+  mainUri: /main/home  

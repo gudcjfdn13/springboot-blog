@@ -25,10 +25,10 @@
     </tr>
 </table>
 <c:if test="${article.extra.canDelete }">
-    <a href="/article/doDelete?id=${article.id }">삭제</a>
+    <a href="/article/doDelete?id=${article.id }&listUri=${listUri}">삭제</a>
 </c:if>
 <c:if test="${article.extra.canModify }">
-    <a href="/article/modify?id=${article.memberId }">수정</a>
+    <a href="/article/modify?id=${article.memberId }&listUri=${listUri}">수정</a>
 </c:if>
 <a href="${listUri }">목록</a>
 <!-- 댓글 작성 -->

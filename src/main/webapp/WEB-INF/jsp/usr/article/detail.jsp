@@ -31,7 +31,9 @@
 </c:if>
 <a href="${listUri }">목록</a>
 <!-- 댓글 작성 -->
+<br />
 <form action="/reply/doWrite" method="POST">
+    <input type="hidden" name="listUri" value="${currentUri }" />
     <input type="hidden" name="articleId" value="${article.id }" />
     <input type="hidden" name="memberId" value="${requestScope.loginedMemberId}" />
     <textarea name="body" cols="30" rows="5" placeholder="댓글"></textarea>
@@ -41,7 +43,7 @@
 <c:forEach var="reply" items="${replies }">
     <div>작성자 : ${reply.extra.writer } <br /> 
     내용 : ${reply.body }</div>
-    <div><a href="/reply/doDelete?id=${reply.id }">삭제</a></div>
+    <div><a href="/reply/doDelete?id=${reply.id }&listUri=${encodedCurrentUri}">삭제</a></div>
     <br />
 </c:forEach>
 <%@ include file="../part/foot.jspf"%>

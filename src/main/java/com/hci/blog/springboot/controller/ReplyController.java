@@ -24,12 +24,16 @@ public class ReplyController {
 		int articleId = Util.getAsInt(writeParam.get("articleId"));
 		replyService.write(writeParam);
 		
-		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", articleId));
+		String listUri = Util.getAsString(writeParam.get("listUri"), "");
+		
+		model.addAttribute("listUri", listUri);
+		model.addAttribute("replaceUri", listUri);
+//		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", articleId));
 		return "common/redirect";
 	}// doWrite
 	
 	@RequestMapping("reply/doDelete")
-	public String doDelete(Model model, HttpServletRequest request, int id) {
+	public String doDelete(Model model, HttpServletRequest request, int id, String listUri) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
 		Reply reply = replyService.getReply(id);
 		int memberId = reply.getMemberId();
@@ -40,9 +44,13 @@ public class ReplyController {
 			return "common/redirect";
 		}
 		
+		if(listUri == null) listUri = "/article/list";
+		
 		replyService.doDelete(id);
 		
-		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", articleId));
+		model.addAttribute("listUri", listUri);
+		model.addAttribute("replaceUri", listUri);
+//		model.addAttribute("replaceUri", String.format("/article/detail?id=%d", articleId));
 		return "common/redirect";
 	}// doDelete
 }

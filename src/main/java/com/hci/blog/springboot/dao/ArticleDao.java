@@ -7,13 +7,15 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.hci.blog.springboot.dto.Article;
+import com.hci.blog.springboot.dto.Board;
 
 @Mapper
 public interface ArticleDao {
 
-	int totalArticles(@Param("searchKeyword") String searchKeyword);
+	int totalArticles(@Param("searchKeyword") String searchKeyword, @Param("boardId") int boardId);
 
-	List<Article> getArticles(@Param("from") int from, @Param("until")  int until, @Param("searchKeyword") String searchKeyword);
+	List<Article> getArticles(@Param("from") int from, @Param("until")  int until,
+			@Param("searchKeyword") String searchKeyword, @Param("boardId") int boardId);
 
 	Article getArticle(@Param("id") int id);
 
@@ -24,6 +26,8 @@ public interface ArticleDao {
 	void doModify(Map<String, Object> modifyParam);
 
 	void doDelete(@Param("id") int id);
+
+	Board getBoardByCode(@Param("boardCode") String boardCode);
 
 
 }

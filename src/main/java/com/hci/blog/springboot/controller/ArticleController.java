@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Article;
+import com.hci.blog.springboot.dto.Board;
 import com.hci.blog.springboot.dto.Reply;
 import com.hci.blog.springboot.dto.ResultData;
 import com.hci.blog.springboot.service.ArticleService;
@@ -25,15 +27,17 @@ public class ArticleController {
 	@Autowired
 	private ReplyService replyService;
 
-	@RequestMapping("article/list")
-	public String showList(Model model, HttpServletRequest request, @RequestParam Map<String, Object> pageParam) {
-		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+	@RequestMapping("article-{boardCode}/list")
+	public String showList(Model model, @RequestParam Map<String, Object> pageParam, 
+			@PathVariable("boardCode") String boardCode) {
 		String searchKeyword = Util.getAsString(pageParam.get("searchKeyword"), "");
+		Board board = articleService.getBoardByCode(boardCode);
 		
+		int boardId = board.getId();
 		int page = Util.getAsInt(pageParam.get("page"), 1); // 현 페이지
 		if (page < 1) page = 1;
 		int articlesInAPage = 10; // 페이지당 게시물
-		int articlesCnt = articleService.totalArticles(searchKeyword); // 총 게시물
+		int articlesCnt = articleService.totalArticles(searchKeyword, boardId); // 총 게시물
 		int pageCnt = (int) Math.ceil((double) articlesCnt / articlesInAPage); // 총 페이지
 
 		int pageBlock = Math.abs((page - 1) / articlesInAPage) + 1; // 페이지 블럭
@@ -43,7 +47,9 @@ public class ArticleController {
 		
 		pageParam.put("page", page);
 		pageParam.put("articlesInAPage", articlesInAPage);
-		List<Article> articles = articleService.getArticles(pageParam, loginedMemberId, searchKeyword);
+		pageParam.put("boardId", boardId);
+		pageParam.put("searchKeyword", searchKeyword);
+		List<Article> articles = articleService.getArticles(pageParam);
 
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("page", page);
@@ -59,10 +65,11 @@ public class ArticleController {
 	public String showDetail(Model model, HttpServletRequest request, int id, String listUri) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
 		Article article = articleService.getArticleForPrint(id, loginedMemberId);
-		if(listUri == null) listUri = "/article/list";
-		
+		if(listUri == null)
+			listUri = "/article/list";
+
 		List<Reply> replies = replyService.getReplies(id);
-		
+
 		model.addAttribute("listUri", listUri);
 		model.addAttribute("replies", replies);
 		model.addAttribute("article", article);
@@ -71,8 +78,9 @@ public class ArticleController {
 
 	@RequestMapping("article/write")
 	public String showWrite(Model model, String listUri) {
-		if(listUri == null) listUri = "/article/list";
-		
+		if (listUri == null)
+			listUri = "/article/list";
+
 		model.addAttribute("listUri", listUri);
 		return "usr/article/write";
 	}// showWrite
@@ -93,12 +101,12 @@ public class ArticleController {
 	@RequestMapping("article/modify")
 	public String showModify(Model model, HttpServletRequest request, int id) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
-		if(loginedMemberId != id) {
+		if (loginedMemberId != id) {
 			model.addAttribute("msg", "권한이 없습니다.");
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		Article article = articleService.getArticle(id);
 		model.addAttribute("article", article);
 		return "usr/article/modify";
@@ -108,12 +116,12 @@ public class ArticleController {
 	public String doModify(Model model, HttpServletRequest request, @RequestParam Map<String, Object> modifyParam) {
 		int id = Util.getAsInt(modifyParam.get("id"));
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
-		if(loginedMemberId != id) {
+		if (loginedMemberId != id) {
 			model.addAttribute("msg", "권한이 없습니다.");
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		ResultData modifyRs = articleService.modify(modifyParam);
 		if (modifyRs.isFail()) {
 			model.addAttribute("msg", modifyRs.getMsg());
@@ -128,7 +136,7 @@ public class ArticleController {
 	@RequestMapping("article/doDelete")
 	public String doDelete(Model model, HttpServletRequest request, int id) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
-		if(loginedMemberId != id) {
+		if (loginedMemberId != id) {
 			model.addAttribute("msg", "권한이 없습니다.");
 			model.addAttribute("historyBack", true);
 			return "common/redirect";

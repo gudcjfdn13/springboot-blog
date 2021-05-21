@@ -7,23 +7,23 @@
 	<!-- totalArticles -->
 	<select id="totalArticles" resultType="int">
 		SELECT COUNT(*)
-		FROM
-		article
-		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
+		FROM article
+		WHERE boardId = #{boardId} 
+		AND
+		title LIKE CONCAT('%', '${searchKeyword}', '%')
 	</select>
 
 	<!-- getArticles -->
 	<select id="getArticles" resultMap="article">
 		SELECT a.*,
-		m.name AS
-		extra__writer
+		m.name AS extra__writer
 		FROM `article` AS a
 		INNER JOIN `member` AS m
-		ON a.memberId
-		= m.id
-		WHERE title LIKE CONCAT('%', '${searchKeyword}', '%')
-		ORDER BY id
-		DESC
+		ON a.memberId = m.id
+		WHERE boardId = #{boardId}
+		AND 
+		title LIKE CONCAT('%', '${searchKeyword}', '%')
+		ORDER BY id DESC
 		LIMIT #{from}, #{until}
 	</select>
 
@@ -31,9 +31,7 @@
 	<select id="getArticle" resultMap="article">
 		SELECT *
 		FROM `article`
-		WHERE
-		id
-		= #{id}
+		WHERE id = #{id}
 	</select>
 
 	<!-- getArticleForPrint -->
@@ -48,13 +46,12 @@
 
 	<!-- doWrite -->
 	<insert id="doWrite" keyProperty="id" useGeneratedKeys="true">
-		insert into `article`
+		INSERT INTO `article`
 		<set>
 			regDate = NOW(),
 			updateDate = NOW(),
 			`title` = #{title},
-			`body` =
-			#{body},
+			`body` = #{body},
 		</set>
 	</insert>
 
@@ -75,6 +72,13 @@
 		WHERE id = #{id}
 	</delete>
 
+	<!-- getBoardByCode -->
+	<select id="getBoardByCode" resultType="Board">
+		SELECT *
+		FROM board
+		WHERE code = #{boardCode}
+	</select>
+
 	<resultMap type="Article" id="article">
 		<id property="id" column="id" />
 		<id property="regDate" column="regDate" />
@@ -82,6 +86,7 @@
 		<id property="title" column="title" />
 		<id property="body" column="body" />
 		<id property="memberId" column="memberId" />
+		<id property="boardId" column="boardId" />
 		<association property="extra" javaType="map">
 			<id property="writer" column="extra__writer" />
 		</association>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dao.ArticleDao;
 import com.hci.blog.springboot.dto.Article;
+import com.hci.blog.springboot.dto.Board;
 import com.hci.blog.springboot.dto.ResultData;
 
 @Service
@@ -17,17 +18,20 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-	public int totalArticles(String searchKeyword) {
-		return articleDao.totalArticles(searchKeyword);
+	public int totalArticles(String searchKeyword, int boardId) {
+		return articleDao.totalArticles(searchKeyword, boardId);
 	}// totalArticles
 	
-	public List<Article> getArticles(Map<String, Object> pageParam, int loginedMemberId, String searchKeyword) {
+	public List<Article> getArticles(Map<String, Object> pageParam) {
+		String searchKeyword = Util.getAsString(pageParam.get("searchKeyword"));
+		int boardId = Util.getAsInt(pageParam.get("boardId"));
 		int articlesInAPage = Util.getAsInt(pageParam.get("articlesInAPage"));
 		int page = Util.getAsInt(pageParam.get("page"), 1);
+		
 		int from = (page-1) * articlesInAPage;
 		int until = articlesInAPage;
 		
-		List<Article> articles = articleDao.getArticles(from, until, searchKeyword);
+		List<Article> articles = articleDao.getArticles(from, until, searchKeyword, boardId);
 
 		return articles;
 	}// getArticles
@@ -50,7 +54,7 @@ public class ArticleService {
 		article.getExtra().put("canDelete", canDelete);
 		
 		return article;
-	}// getArticle
+	}// getArticleForPrint
 
 	public ResultData write(Map<String, Object> writeParam) {
 		ResultData cf = confirm(writeParam);
@@ -85,6 +89,10 @@ public class ArticleService {
 	public void doDelete(int id) {
 		articleDao.doDelete(id);
 	}// doDelete
+
+	public Board getBoardByCode(String boardCode) {
+		return articleDao.getBoardByCode(boardCode);
+	}
 	
 
 }

@@ -5,6 +5,8 @@
 <%@ include file="../part/head.jspf"%>
 <c:set var="listUri" value="${encodedCurrentUri }"></c:set>
 
+
+
 <!-- 게시물 없을때 -->
 <c:if test="${articles.size() == 0 }">
     <h1>게시물이 없습니다.</h1>

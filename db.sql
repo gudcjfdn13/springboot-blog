@@ -36,7 +36,7 @@ updateDate = NOW(),
 `loginPw` = 'user1',
 `name` = 'user1';
 
-# article table 에 memberId 추가
+# article 테이블에 memberId 추가
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER `body`;
 
 INSERT INTO `article`
@@ -59,7 +59,7 @@ id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 regDate DATETIME NOT NULL,
 updateDate DATETIME NOT NULL,
 `body` VARCHAR(300) NOT NULL,
-articleId int(10) UNSIGNED not null,
+articleId INT(10) UNSIGNED NOT NULL,
 memberId INT(10) UNSIGNED NOT NULL
 );
 
@@ -91,3 +91,31 @@ updateDate = NOW(),
 articleId = 2,
 memberId = 2;
 
+#board table 생성
+CREATE TABLE `board` (
+id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+regDate DATETIME NOT NULL,
+`name` CHAR(20) NOT NULL,
+`code` CHAR(20) NOT NULL
+);
+
+INSERT INTO `board`
+SET regDate = NOW(),
+`name` = '공지',
+`code` = 'notice';
+
+INSERT INTO `board`
+SET regDate = NOW(),
+`name` = '자유',
+`code` = 'free';
+
+# article 테이블에 boardId 추가
+ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER id;
+
+UPDATE article
+SET boardId = 1
+WHERE id = 1;
+
+UPDATE article
+SET boardId = 2
+WHERE id = 2;

@@ -4,9 +4,9 @@
 <c:set var="pageName" value="Article List" />
 <%@ include file="../part/head.jspf"%>
 <c:set var="listUri" value="${encodedCurrentUri }"></c:set>
-
-
-
+<h1>${board.name }</h1>
+<a href="/article-notice/list">공지사항</a>
+<a href="/article-free/list">자유게시판</a>
 <!-- 게시물 없을때 -->
 <c:if test="${articles.size() == 0 }">
     <h1>게시물이 없습니다.</h1>
@@ -36,18 +36,20 @@
     </table>
 </c:if>
 <!-- 게시물 서칭 -->
-<form action="/article/list">
+<form action="/article-${board.code }/list">
     <input type="text" name="searchKeyword" placeholder="Search" value="${searchKeyword }" />
     <input type="submit" value="검색" />
 </form>
 <!-- 게시물 페이징 -->
-<a href="/article/list?searchKeyword=${searchKeyword }">처음으로</a>
-<a href="/article/list?page=${page-1 }&searchKeyword=${searchKeyword }">◀</a>
+<c:set var="articleListUri" value="/article-${board.code }/list?searchKeyword=${searchKeyword }" />
+
+<a href="${articleListUri }">처음으로</a>
+<a href="${articleListUri }&page=${page-1 }">◀</a>
 <c:forEach var="num" begin="${startPage }" end="${lastPage }">
-    <a href="/article/list?page=${num }&searchKeyword=${searchKeyword }">${num }</a>
+    <a href="${articleListUri }&page=${num }">${num }</a>
 </c:forEach>
-<a href="/article/list?page=${page+1 }&searchKeyword=${searchKeyword }">▶</a>
-<a href="/article/list?page=${pageCnt }&searchKeyword=${searchKeyword }">끝으로</a>
+<a href="${articleListUri }&page=${page+1 }">▶</a>
+<a href="${articleListUri }&page=${pageCnt }">끝으로</a>
 <a href="/article/write?listUri=${listUri }">글쓰기</a>
 
 <%@ include file="../part/foot.jspf"%>

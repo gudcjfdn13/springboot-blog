@@ -92,7 +92,11 @@ public class ArticleService {
 
 	public Board getBoardByCode(String boardCode) {
 		return articleDao.getBoardByCode(boardCode);
-	}
+	}// getBoardByCode
+
+	public Board getBoardById(int boardId) {
+		return articleDao.getBoardById(boardId);
+	}// getBoardById
 	
 
 }

@@ -79,6 +79,13 @@
 		WHERE code = #{boardCode}
 	</select>
 
+	<!-- getBoardById -->
+	<select id="getBoardById" resultType="Board">
+		SELECT *
+		FROM board
+		WHERE id = #{boardId}
+	</select>
+
 	<resultMap type="Article" id="article">
 		<id property="id" column="id" />
 		<id property="regDate" column="regDate" />

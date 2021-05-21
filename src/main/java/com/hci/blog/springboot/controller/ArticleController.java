@@ -28,29 +28,34 @@ public class ArticleController {
 	private ReplyService replyService;
 
 	@RequestMapping("article-{boardCode}/list")
-	public String showList(Model model, @RequestParam Map<String, Object> pageParam, 
+	public String showList(Model model, @RequestParam Map<String, Object> pageParam,
 			@PathVariable("boardCode") String boardCode) {
 		String searchKeyword = Util.getAsString(pageParam.get("searchKeyword"), "");
 		Board board = articleService.getBoardByCode(boardCode);
-		
+
 		int boardId = board.getId();
 		int page = Util.getAsInt(pageParam.get("page"), 1); // 현 페이지
-		if (page < 1) page = 1;
 		int articlesInAPage = 10; // 페이지당 게시물
 		int articlesCnt = articleService.totalArticles(searchKeyword, boardId); // 총 게시물
 		int pageCnt = (int) Math.ceil((double) articlesCnt / articlesInAPage); // 총 페이지
+		if (page > pageCnt)
+			page = pageCnt;
 
 		int pageBlock = Math.abs((page - 1) / articlesInAPage) + 1; // 페이지 블럭
 		int startPage = ((pageBlock - 1) * articlesInAPage) + 1; // 시작 페이지
 		int lastPage = (startPage + articlesInAPage) - 1; // 끝 페이지
-		if(lastPage > pageCnt) lastPage = pageCnt;
-		
+		if (lastPage > pageCnt)
+			lastPage = pageCnt;
+		if (page < 1)
+			page = 1;
+
 		pageParam.put("page", page);
 		pageParam.put("articlesInAPage", articlesInAPage);
 		pageParam.put("boardId", boardId);
 		pageParam.put("searchKeyword", searchKeyword);
 		List<Article> articles = articleService.getArticles(pageParam);
 
+		model.addAttribute("board", board);
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("page", page);
 		model.addAttribute("articlesCnt", articlesCnt);
@@ -65,11 +70,14 @@ public class ArticleController {
 	public String showDetail(Model model, HttpServletRequest request, int id, String listUri) {
 		int loginedMemberId = (int) request.getAttribute("loginedMemberId");
 		Article article = articleService.getArticleForPrint(id, loginedMemberId);
-		if(listUri == null)
-			listUri = "/article/list";
+		if (listUri == null)
+			listUri = "/article-notice/list";
+
+		Board board = articleService.getBoardById(article.getBoardId());
 
 		List<Reply> replies = replyService.getReplies(id);
 
+		model.addAttribute("board", board);
 		model.addAttribute("listUri", listUri);
 		model.addAttribute("replies", replies);
 		model.addAttribute("article", article);
@@ -79,7 +87,7 @@ public class ArticleController {
 	@RequestMapping("article/write")
 	public String showWrite(Model model, String listUri) {
 		if (listUri == null)
-			listUri = "/article/list";
+			listUri = "/article-notice/list";
 
 		model.addAttribute("listUri", listUri);
 		return "usr/article/write";

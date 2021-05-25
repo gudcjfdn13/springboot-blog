@@ -57,6 +57,9 @@ public class ArticleService {
 	}// getArticleForPrint
 
 	public ResultData write(Map<String, Object> writeParam) {
+		if(writeParam.get("boardId").equals("none")) {
+			return new ResultData("F-1", "카테고리를 적용해주세요.");
+		}
 		ResultData cf = confirm(writeParam);
 		if(cf.isFail())
 			return new ResultData(cf.getResultCode(), cf.getMsg());

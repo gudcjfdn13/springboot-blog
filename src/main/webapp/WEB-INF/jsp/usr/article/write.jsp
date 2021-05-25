@@ -4,12 +4,18 @@
 <c:set var="pageName" value="Article Write" />
 <%@ include file="../part/head.jspf"%>
 <form action="/article/doWrite" method="POST">
+<input type="hidden" name="memberId" value="${requestScope.loginedMemberId }" />
     <table>
         <thead>
             <tr>
                 <th>Title</th>
                 <td>
                     <input name="title" type="text" placeholder="제목" autocomplete="off" />
+                    <select name="boardId">
+                        <option value="none">선택</option>
+                        <option value="1">공지</option>
+                        <option value="2">자유</option>
+                    </select>
                 </td>
             </tr>
         </thead>

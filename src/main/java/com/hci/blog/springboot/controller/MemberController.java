@@ -38,7 +38,7 @@ public class MemberController {
 			return "common/redirect";
 		}
 
-		model.addAttribute("replaceUri", mainUri);
+		model.addAttribute("replaceUri", "/member/login");
 		return "common/redirect";
 	}// doJoin
 

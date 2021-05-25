@@ -8,16 +8,10 @@
 	<select id="getMember" resultType="Member">
 		SELECT *
 		FROM `member`
-		WHERE loginId = #{loginId}
+		WHERE
+		loginId = #{loginId}
 		AND
 		loginPw = #{loginPw}
-	</select>
-
-	<!-- getMemberByLoginId -->
-	<select id="getMemberByLoginId" resultType="Member">
-		SELECT *
-		FROM `member`
-		WHERE loginId = #{loginId}
 	</select>
 
 	<!-- getMemberById -->
@@ -27,45 +21,61 @@
 		WHERE id = #{id}
 	</select>
 
+	<!-- getMemberByLoginId -->
+	<select id="getMemberByLoginId" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE loginId = #{loginId}
+	</select>
+
+	<!-- getMemberByEmail -->
+	<select id="getMemberByEmail" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE email = #{email}
+	</select>
+
+	<!-- getMemberByEmailAndName -->
+	<select id="getMemberByEmailAndName" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE email = #{email}
+		AND
+		name = #{name}
+	</select>
+
+	<!-- getMemberByLoginIdAndEmail -->
+	<select id="getMemberByLoginIdAndEmail" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE loginId = #{loginId}
+		AND
+		email = #{email}
+	</select>
+
 	<!-- joinMember -->
-	<insert id="joinMember">
+	<insert id="joinMember" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO `member`
 		<set>
 			regDate = NOW(),
 			updateDate = NOW(),
 			loginId = #{loginId},
-			loginPw = #{loginPw},
+			loginPw =
+			#{loginPw},
 			`name` = #{name},
 			email = #{email},
 		</set>
 	</insert>
-	
+
 	<!-- modifyUserInfo -->
 	<update id="modifyUserInfo">
-	UPDATE `member`
-	<set>
-	updateDate = NOW(),
-	loginPw = #{loginPw},
-	</set>
-	WHERE id = #{id}
+		UPDATE `member`
+		<set>
+			updateDate = NOW(),
+			loginPw = #{loginPw},
+		</set>
+		WHERE id = #{id}
 	</update>
-	
-	<!-- getMemberByEmailAndName -->
-	<select id="getMemberByEmailAndName" resultType="Member">
-	SELECT *
-	FROM `member`
-	WHERE email = #{email}
-	AND
-	name = #{name}
-	</select>
-	
-	<!-- getMemberByLoginIdAndEmail -->
-    <select id="getMemberByLoginIdAndEmail" resultType="Member">
-    SELECT *
-    FROM `member`
-    WHERE loginId = #{loginId}
-    AND
-    email = #{email}
-    </select>
+
 
 </mapper>

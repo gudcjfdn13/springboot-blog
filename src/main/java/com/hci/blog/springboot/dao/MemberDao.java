@@ -11,16 +11,18 @@ import com.hci.blog.springboot.dto.Member;
 public interface MemberDao {
 	Member getMember(Map<String, Object> loginParam);
 
+	Member getMemberById(@Param("id") int loginedMemberId);
+
 	Member getMemberByLoginId(@Param("loginId") String loginId);
 
-	Member getMemberById(@Param("id") int loginedMemberId);
+	Object getMemberByEmail(@Param("email") String email);
+
+	Member getMemberByLoginIdAndEmail(@Param("loginId") String loginId, @Param("email") String email);
+
+	Member getMemberByEmailAndName(@Param("email") String email, @Param("name") String name);
 
 	void joinMember(Map<String, Object> joinParam);
 
 	void modifyUserInfo(Map<String, Object> modifyParam);
-
-	Member getMemberByEmailAndName(@Param("email") String email, @Param("name") String name);
-
-	Member getMemberByLoginIdAndEmail(@Param("loginId") String loginId, @Param("email") String email);
 
 }

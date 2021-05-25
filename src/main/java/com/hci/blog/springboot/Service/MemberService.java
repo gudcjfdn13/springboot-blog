@@ -3,6 +3,7 @@ package com.hci.blog.springboot.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,8 @@ public class MemberService {
 	@Autowired
 	MailService mailService;
 	@Autowired
+	AttrService attrService;
+	@Autowired
 	MemberDao memberDao;
 
 	public ResultData login(Map<String, Object> loginParam) {
@@ -40,7 +43,7 @@ public class MemberService {
 		if (member == null)
 			return new ResultData("F-1", "존재하지 않는 회원입니다.");
 
-		return new ResultData("S-1", "로그인 성공", member.getId());
+		return new ResultData("S-1", "로그인 성공", member);
 	}// login
 
 	public ResultData join(Map<String, Object> joinParam) {
@@ -48,9 +51,12 @@ public class MemberService {
 		String loginPw = Util.getAsString(joinParam.get("loginPw"));
 		String loginPwCf = Util.getAsString(joinParam.get("loginPwCf"));
 		String name = Util.getAsString(joinParam.get("name"));
+		String email = Util.getAsString(joinParam.get("email"));
 
 		if (loginId.length() == 0)
 			return new ResultData("F-1", "아이디를 입력해주세요.");
+		if (email.length() == 0)
+			return new ResultData("F-1", "이메일을 입력해주세요.");
 		if (loginPw.length() == 0)
 			return new ResultData("F-1", "비밀번호를 입력해주세요.");
 		if (loginPw.equals(loginPwCf) == false)
@@ -60,7 +66,18 @@ public class MemberService {
 		if (memberDao.getMemberByLoginId(loginId) != null) {
 			return new ResultData("F-1", "이미 존재하는 아이디 입니다.");
 		}
+		if (memberDao.getMemberByEmail(email) != null) {
+			return new ResultData("F-1", "이미 사용중인 이메일 입니다.");
+		}
+		loginPw = Util.sha256(loginPw);
+		joinParam.put("loginPw", loginPw);
 		memberDao.joinMember(joinParam);
+		
+		int id = Util.getAsInt(joinParam.get("id"));
+		
+		String authCode = genEmailAuthCode(id);
+
+		sendJoinCompleteMail(id, (String) joinParam.get("email"), authCode);
 
 		return new ResultData("S-1", "로그인 성공");
 	}// join
@@ -128,7 +145,38 @@ public class MemberService {
 		memberDao.modifyUserInfo(param);
 
 		return new ResultData("S-1", "해당 이메일로 임시 패스워드를 발송했습니다.");
+	}// setTempPwAndNotify
+
+	private String genEmailAuthCode(int actorId) {
+		String authCode = UUID.randomUUID().toString();
+		attrService.setValue("member__" + actorId + "__extra__emailAuthCode", authCode);
+
+		return authCode;
+	}// genEmailAuthCode
+	
+	private void sendJoinCompleteMail(int actorId, String email, String authCode) {
+		String mailTitle = String.format("[%s] 가입이 완료되었습니다. 이메일인증을 진행해주세요.", siteName);
+
+		StringBuilder mailBodySb = new StringBuilder();
+		mailBodySb.append("<h1>가입이 완료되었습니다.</h1>");
+		mailBodySb.append("<div>아래 인증코드를 클릭하여 이메일인증을 마무리 해주세요.</div>");
+
+		String doAuthEmailUrl = siteUri + "/member/doAuthEmail?authCode=" + authCode + "&email=" + email
+				+ "&actorId=" + actorId;
+		mailBodySb.append(String.format("<p><a href=\"%s\" target=\"_blank\">인증하기</a></p>", doAuthEmailUrl));
+
+		mailService.send(email, mailTitle, mailBodySb.toString());
+	}// sendJoinCompleteMail
+	
+	public String getEmailAuthCode(int actorId) {
+		return attrService.getValue("member__" + actorId + "__extra__emailAuthCode");
 	}
-
-
+	
+	public void saveAuthedEmail(int actorId, String email) {
+		attrService.setValue("member__" + actorId + "__extra__authedEmail", email);
+	}
+	
+	public String getAuthedEmail(int actorId) {
+		return attrService.getValue("member__" + actorId + "__extra__authedEmail");
+	}
 }

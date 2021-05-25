@@ -3,6 +3,7 @@
 
 <c:set var="pageName" value="Sign Up" />
 <%@ include file="../part/head.jspf"%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 <script>
     function doJoinConfirm(form) {
         var isDone = false;
@@ -42,7 +43,7 @@
             form.email.focus();
             return;
         }
-
+        
         form.submit();
         isDone = true;
     }

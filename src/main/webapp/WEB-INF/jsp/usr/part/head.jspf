@@ -22,12 +22,12 @@ textarea {
 </style>
 </head>
 <body>
-<c:if test="${isLogined }"><a href="/member/modify">${requestScope.loginedMember.name }</a>님</c:if>
+<c:if test="${isLogined }"><a href="/member/showCheckPw">${requestScope.loginedMember.name }</a>님</c:if>
 <c:if test="${!isLogined }">
 <a href="/member/login">로그인</a>
 <a href="/member/join">회원가입</a>
 </c:if>
 <c:if test="${isLogined }">
-<a href="/member/modify">내 정보</a>
+<a href="/member/showCheckPw">내 정보</a>
 <a href="/member/doLogout">로그아웃</a>
 </c:if>

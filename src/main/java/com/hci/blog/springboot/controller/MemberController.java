@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hci.blog.springboot.Util.Util;
 import com.hci.blog.springboot.dto.Member;
 import com.hci.blog.springboot.dto.ResultData;
 import com.hci.blog.springboot.service.MemberService;
@@ -22,6 +23,34 @@ public class MemberController {
 	private MemberService memberService;
 	@Value("${custom.mainUri}")
 	private String mainUri;
+	
+	@RequestMapping("member/showCheckPw")
+	public String showCheckPw() {
+		return "usr/member/checkPw";
+	}
+	
+	@RequestMapping("member/doCheckPw")
+	public String doCheckPw(Model model, HttpServletRequest request, String redirectUri, String loginPw) {
+		Member loginedMember = (Member) request.getAttribute("loginedMember");
+
+		if (loginedMember.getLoginPw().equals(loginPw) == false) {
+			model.addAttribute("historyBack", true);
+			model.addAttribute("msg", "비밀번호가 일치하지 않습니다.");
+			return "common/redirect";
+		}
+
+		String authCode = memberService.genCheckLoginPwAuthCode(loginedMember.getId());
+
+		if (redirectUri == null || redirectUri.length() == 0) {
+			redirectUri = "/main/home";
+		}
+
+		redirectUri = Util.getNewUri(redirectUri, "authCode", authCode);
+
+		model.addAttribute("replaceUri", redirectUri);
+
+		return "common/redirect";
+	}
 
 	@RequestMapping("member/join")
 	public String showJoin() {
@@ -123,8 +152,24 @@ public class MemberController {
 	}// doLogout
 
 	@RequestMapping("member/modify")
-	public String showModify(Model model, HttpServletRequest request) {
+	public String showModify(Model model, HttpServletRequest request, String authCode) {
 		Member member = (Member) request.getAttribute("loginedMember");
+		
+		if(authCode == null || authCode.length() == 0) {
+			model.addAttribute("msg", "정상적인 경로를 이용해주세요.");
+			model.addAttribute("replaceUri", mainUri);
+			return "common/redirect";
+		}
+		
+		ResultData checkValidCheckPasswordAuthCodeResultData = memberService
+				.checkValidCheckLoginPwAuthCode(member.getId(), authCode);
+
+		if (checkValidCheckPasswordAuthCodeResultData.isFail()) {
+			model.addAttribute("historyBack", true);
+			model.addAttribute("msg", checkValidCheckPasswordAuthCodeResultData.getMsg());
+			return "common/redirect";
+		}
+
 
 		model.addAttribute("member", member);
 		return "usr/member/modify";

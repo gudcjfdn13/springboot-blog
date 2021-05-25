@@ -1,5 +1,6 @@
 package com.hci.blog.springboot.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +27,20 @@ public class ReplyService {
 		return new ResultData("S-1", "댓글 작성 성공");
 	}// write
 
-	public List<Reply> getReplies(int articleId) {
-		return replyDao.getReplies(articleId);
+	public List<Reply> getReplies(int articleId, int loginedMemberId) {
+		List<Reply> replies = replyDao.getReplies(articleId);
+		for(Reply reply : replies) {
+			if(reply.getExtra()==null) {
+				reply.setExtra(new HashMap<String, Object>());
+			}
+			boolean canModify = reply.getMemberId() == loginedMemberId;
+			boolean canDelete = canModify;
+			
+			reply.getExtra().put("canModify", canModify);
+			reply.getExtra().put("canDelete", canDelete);
+	
+		}
+		return replies;
 	}// getReplies
 
 	public Reply getReply(int id) {

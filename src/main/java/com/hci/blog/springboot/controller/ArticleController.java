@@ -75,7 +75,7 @@ public class ArticleController {
 
 		Board board = articleService.getBoardById(article.getBoardId());
 
-		List<Reply> replies = replyService.getReplies(id);
+		List<Reply> replies = replyService.getReplies(id, loginedMemberId);
 
 		model.addAttribute("board", board);
 		model.addAttribute("listUri", listUri);

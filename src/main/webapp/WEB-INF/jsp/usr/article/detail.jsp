@@ -42,9 +42,16 @@
 </form>
 <!-- 댓글 리스팅 -->
 <c:forEach var="reply" items="${replies }">
-    <div>작성자 : ${reply.extra.writer } <br /> 
-    내용 : ${reply.body }</div>
-    <div><a href="/reply/doDelete?id=${reply.id }&listUri=${encodedCurrentUri}">삭제</a></div>
+    <div>
+        작성자 : ${reply.extra.writer }
+        <br />
+        내용 : ${reply.body }
+    </div>
+    <c:if test="${reply.extra.canDelete }">
+        <div>
+            <a href="/reply/doDelete?id=${reply.id }&listUri=${encodedCurrentUri}">삭제</a>
+        </div>
+    </c:if>
     <br />
 </c:forEach>
 <%@ include file="../part/foot.jspf"%>

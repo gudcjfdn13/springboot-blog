@@ -45,11 +45,11 @@ public class MemberController {
 	@RequestMapping("member/login")
 	public String showLogin(Model model, HttpServletRequest request) {
 		boolean isLogined = (boolean) request.getAttribute("isLogined");
-		if(isLogined) {
+		if (isLogined) {
 			model.addAttribute("msg", "이미 로그인중 입니다.");
 			model.addAttribute("replaceUri", mainUri);
 		}
-		
+
 		return "usr/member/login";
 	}// showLogin
 
@@ -73,35 +73,79 @@ public class MemberController {
 	@RequestMapping("member/doLogout")
 	public String doLogout(Model model, HttpSession session, HttpServletRequest request) {
 		boolean isLogined = (boolean) request.getAttribute("isLogined");
-		if(!isLogined) {
+		if (!isLogined) {
 			model.addAttribute("msg", "로그인 상태가 아닙니다.");
 			model.addAttribute("replaceUri", mainUri);
 		}
+
 		session.removeAttribute("loginedMemberId");
 
 		model.addAttribute("replaceUri", mainUri);
 		return "common/redirect";
 	}// doLogout
-	
+
 	@RequestMapping("member/modify")
 	public String showModify(Model model, HttpServletRequest request) {
 		Member member = (Member) request.getAttribute("loginedMember");
-		
+
 		model.addAttribute("member", member);
 		return "usr/member/modify";
 	}// showModify
-	
+
 	@RequestMapping("member/doModify")
 	public String doModify(Model model, @RequestParam Map<String, Object> modifyParam) {
 		ResultData modifyRs = memberService.modify(modifyParam);
-		if(modifyRs.isFail()) {
+		if (modifyRs.isFail()) {
 			model.addAttribute("msg", modifyRs.getMsg());
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		model.addAttribute("msg", modifyRs.getMsg());
 		model.addAttribute("historyBack", true);
 		return "common/redirect";
 	}// doModify
+
+	@RequestMapping("member/showFindLoginId")
+	public String showFindLoginId() {
+
+		return "usr/member/findLoginId";
+	}// showFindLoginId
+
+	@RequestMapping("member/doFindLoginId")
+	public String doFindLoginId(Model model, String email, String name) {
+		ResultData findRs = memberService.findLoginId(email, name);
+		if (findRs.isFail()) {
+			model.addAttribute("msg", findRs.getMsg());
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+
+		model.addAttribute("loginId", findRs.getBody());
+		return "usr/member/findLoginId_rs";
+	}// doFindLoginId
+
+	@RequestMapping("member/showFindLoginPw")
+	public String showFindLoginPw() {
+
+		return "usr/member/findLoginPw";
+	}// showFindLoginPw
+
+	@RequestMapping("member/doFindLoginPw")
+	public String doFindLoginPw(Model model, String loginId, String email) {
+		ResultData findRs = memberService.findLoginPw(loginId, email);
+		if (findRs.isFail()) {
+			model.addAttribute("msg", findRs.getMsg());
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
+		Member member = (Member)findRs.getBody();
+		
+		ResultData setTempPwAndNotify = memberService.setTempPwAndNotify(member);
+
+		model.addAttribute("msg", setTempPwAndNotify.getMsg());
+		model.addAttribute("replaceUri", "/member/login");
+		return "common/redirect";
+	}// doFindLoginId
 }

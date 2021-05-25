@@ -101,12 +101,12 @@ regDate DATETIME NOT NULL,
 
 INSERT INTO `board`
 SET regDate = NOW(),
-`name` = '공지',
+`name` = '공지사항',
 `code` = 'notice';
 
 INSERT INTO `board`
 SET regDate = NOW(),
-`name` = '자유',
+`name` = '자유게시판',
 `code` = 'free';
 
 # article 테이블에 boardId 추가
@@ -119,3 +119,15 @@ WHERE id = 1;
 UPDATE article
 SET boardId = 2
 WHERE id = 2;
+
+# member 테이블에 email 추가
+ALTER TABLE `member` ADD COLUMN email CHAR(100) NOT NULL AFTER `name`;
+
+UPDATE `member`
+SET email = 'admin@naver.com'
+WHERE id = 1;
+
+UPDATE `member`
+SET email = 'user1@naver.com'
+WHERE id = 2;
+

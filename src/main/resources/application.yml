@@ -1,15 +1,18 @@
-server :
-  port: 8081
-  
-  error:
-    include-exception: true
-    include-stacktrace: always
-    include-message: always
-    include-binding-errors: always
-    
 spring:
   profiles:
     active: local
+    
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gudcjfdn14@gmail.com
+    password: yijqjvpyszsuckce
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
     
   mvc:
     view:
@@ -26,4 +29,19 @@ mybatis:
   type-aliases-package: com.hci.blog.springboot.dto
   
 custom :
-  mainUri: /main/home  
+  mainUri: /main/home
+  siteName: HITREE  
+  siteUri: http://localhost:8081
+  emailFrom: no-reply@localhost
+  emailFromName: HCITREE
+  siteLoginUri: http://localhost:8081/member/login
+  
+server :
+  port: 8081
+  
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-message: always
+    include-binding-errors: always
+    

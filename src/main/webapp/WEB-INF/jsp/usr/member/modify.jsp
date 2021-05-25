@@ -28,6 +28,7 @@
         isDone = true;
     }
 </script>
+<h1>회원정보 수정</h1>
 <form action="/member/doModify" method="POST" onsubmit="doModifyConfirm(this); return false;">
     <input type="hidden" name="id" value="${member.id }" />
     <table>

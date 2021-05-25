@@ -36,11 +36,18 @@
             form.name.focus();
             return;
         }
+        form.email.value = form.email.value.trim();
+        if (form.email.value.length == 0) {
+            alert('이메일을 입력하세요.');
+            form.email.focus();
+            return;
+        }
 
         form.submit();
         isDone = true;
     }
 </script>
+<h1>회원가입</h1>
 <form action="/member/doJoin" method="POST" onsubmit="doJoinConfirm(this); return false;">
     <table>
         <tr>
@@ -65,6 +72,12 @@
             <th>NAME</th>
             <td>
                 <input name="name" type="text" placeholder="Name" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th>EMAIL</th>
+            <td>
+                <input name="email" type="email" placeholder="EMAIL" autocomplete="off" />
             </td>
         </tr>
     </table>

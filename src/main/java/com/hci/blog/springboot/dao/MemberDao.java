@@ -19,4 +19,8 @@ public interface MemberDao {
 
 	void modifyUserInfo(Map<String, Object> modifyParam);
 
+	Member getMemberByEmailAndName(@Param("email") String email, @Param("name") String name);
+
+	Member getMemberByLoginIdAndEmail(@Param("loginId") String loginId, @Param("email") String email);
+
 }

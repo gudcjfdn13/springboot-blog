@@ -36,6 +36,7 @@
 			loginId = #{loginId},
 			loginPw = #{loginPw},
 			`name` = #{name},
+			email = #{email},
 		</set>
 	</insert>
 	
@@ -48,5 +49,23 @@
 	</set>
 	WHERE id = #{id}
 	</update>
+	
+	<!-- getMemberByEmailAndName -->
+	<select id="getMemberByEmailAndName" resultType="Member">
+	SELECT *
+	FROM `member`
+	WHERE email = #{email}
+	AND
+	name = #{name}
+	</select>
+	
+	<!-- getMemberByLoginIdAndEmail -->
+    <select id="getMemberByLoginIdAndEmail" resultType="Member">
+    SELECT *
+    FROM `member`
+    WHERE loginId = #{loginId}
+    AND
+    email = #{email}
+    </select>
 
 </mapper>

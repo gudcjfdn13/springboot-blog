@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member extends Dto{
-	private String loginId, loginPw, name;
+	private String loginId, loginPw, name, email;
 }

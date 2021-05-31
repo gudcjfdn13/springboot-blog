@@ -9,9 +9,8 @@
 
 # 개발 툴
 - Maven
-- sts4.7.2
+- sts 4.10
 - Visual Studio Code
-- Whale
 - Git, GitHUB
 
 # 구현기능 리스트
